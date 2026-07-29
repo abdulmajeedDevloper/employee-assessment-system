@@ -1,0 +1,28 @@
+Sprint 4.5A Verification Evidence
+Generated: 2026-07-28 UTC
+
+Scope: Administrative assessment assignment directory, creation, pending-only editing, availability handling, permissions, audit privacy, and employee-facing availability behavior.
+
+Automated checks completed in this environment:
+- PHP syntax: 130 non-vendor PHP files passed php -l.
+- Route reflection: 52 handlers checked; 0 missing controller classes or action methods.
+- Translation parity: Arabic 422 keys; English 422 keys; 0 duplicate keys; 0 missing keys in either language.
+- Assignment templates: directory, details, and create form rendered with representative data and no PHP warnings.
+- Assignment validator smoke test: accepted valid active identifiers, bounded attempt count, local datetime input, and converted the availability window to UTC.
+- Authorization smoke review: super_admin remains unrestricted; supervisor has view_assignments/manage_assignments; report_viewer has neither permission.
+- Sanitized project security search: no unsafe SQL concatenation, hardcoded secrets, raw national-ID logging, debug calls, obsolete endpoint references, private keys, or platform-bypass flags were found.
+- Route and form review: all assignment POST endpoints use CsrfMiddleware::verify() and manage_assignments authorization.
+- Audit review: assignment create/update payloads contain field-name arrays only and no submitted assignment values.
+
+Checks blocked by container capabilities:
+- PHPUnit could not start because the available PHP build lacks dom, mbstring, and xmlwriter.
+- MySQL integration tests could not run because pdo_mysql is unavailable in the container.
+
+New tests added and syntax-verified:
+- tests/Unit/AdminAssignmentFormValidatorTest.php
+- tests/Integration/AdminAssignmentManagementTest.php
+
+Required workstation verification before client delivery:
+1. Run: C:\php82\php.exe vendor\bin\phpunit --filter AdminAssignment
+2. Run: C:\php82\php.exe vendor\bin\phpunit
+3. Test create/edit/list/details flows in both Arabic and English against employee_assessment_test.

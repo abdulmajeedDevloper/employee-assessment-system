@@ -1,0 +1,34 @@
+Sprint 4.6A Verification Evidence
+Generated: 2026-07-28 UTC
+
+Scope: Executive dashboard, official-result reporting, filters, RBAC-aware navigation, privacy masking, report indexes, and automated test coverage.
+
+Automated/static checks completed in this environment:
+- PHP syntax: 146 non-vendor project PHP files passed php -l.
+- Composer JSON: parsed successfully with JSON_THROW_ON_ERROR.
+- Composer autoload: vendor/autoload.php loaded successfully and the App\\ PSR-4 mapping was verified.
+- Route reflection: 59 route handlers checked; 0 missing controller classes or action methods.
+- Translation parity: Arabic 590 keys; English 590 keys; 0 duplicate keys; 0 missing keys in either language.
+- Literal translation usage: all non-dynamic trans('...') keys used by application controllers/views exist in both dictionaries.
+- Dashboard template: rendered with representative bilingual/performance/follow-up data without PHP warnings; HTML escaping checks passed.
+- Reports template: rendered with representative Arabic data without PHP warnings; HTML escaping checks passed.
+- Report-viewer navigation: rendered output did not contain attempt links or operational navigation entries unavailable to that role.
+- Report service smoke test: filter normalization, positive integer parsing, enum whitelisting, page parsing, Asia/Aden local-day UTC boundaries, and rounded summary values passed.
+- Authorization review: /admin/reports requires view_reports; report_viewer retains report access but not view_attempts/view_assignments/view_tests/view_questions.
+- Privacy review: report SQL selects only national_id_last4 and constructs a masked value; no encrypted or raw National ID is returned by the report repository.
+- SQL review: all user-controlled report values are bound through prepared PDO statements; dynamic SQL clauses are selected only from fixed whitelists.
+- Migration lifecycle: matching 004 up/down files are present after migrations 001-003.
+- Project security search: passed with no unsafe SQL concatenation, hardcoded secrets, private keys, raw National-ID logging, debug calls, removed endpoints, or platform bypass flags.
+- Whitespace verification: 0 trailing-whitespace matches across application, configuration, migration, language, script, test, and view source files.
+
+Checks blocked by container capabilities:
+- PHPUnit could not start because the available PHP build lacks dom, mbstring, and xmlwriter.
+- MySQL integration tests and migration execution could not run because pdo_mysql and a MySQL server/client are unavailable.
+- The Composer CLI executable is not installed in the container, so `composer validate` itself could not be invoked; composer.json parsing and autoload loading were verified separately.
+
+Required verification on the target Windows/MySQL environment:
+1. C:\php82\php.exe scripts\migrate.php
+2. C:\php82\php.exe vendor\bin\phpunit
+3. Log in as supervisor and verify dashboard values against seeded/test records.
+4. Log in as report_viewer and verify only Dashboard, Employees, and Reports are shown.
+5. Verify report filters, pagination, Arabic/English display, masked National IDs, and latest-official-attempt behavior.

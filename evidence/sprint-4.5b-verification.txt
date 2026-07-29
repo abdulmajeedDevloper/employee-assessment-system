@@ -1,0 +1,31 @@
+Sprint 4.5B Verification Evidence
+Generated: 2026-07-28 UTC
+
+Scope: Administrative attempt directory, attempt details, cancellation, retake authorization and consumption, supervisor notes, expired-attempt recovery, permissions, audit privacy, and supporting indexes.
+
+Automated/static checks completed in this environment:
+- PHP syntax: 137 application/project PHP files passed php -l.
+- Composer autoload: vendor/autoload.php loaded successfully.
+- Route reflection: 58 handlers checked; 0 missing controller classes or action methods.
+- Translation parity: Arabic 533 keys; English 533 keys; 0 duplicate keys; 0 missing keys in either language.
+- Dynamic attempt/assignment/session/submission translation suffixes used by the views were checked against both dictionaries.
+- Attempt directory template rendered with representative data and no PHP warnings.
+- Attempt detail template rendered with representative answers, events, sessions, audit history, and action forms with no PHP warnings.
+- Attempt action validator smoke test: 5 validation cases passed.
+- Attempt directory normalization/timezone smoke test: 4 cases passed, including Asia/Riyadh day boundaries converted to UTC.
+- Authorization smoke test: 6 permission cases passed for super_admin, supervisor, and report_viewer.
+- Route/form review: all attempt POST endpoints require the specific permission and CsrfMiddleware::verify().
+- Concurrency review: action tokens are 64 hex characters, one-time, action-bound, administrator-bound, attempt-bound, fingerprint-bound, expire after two hours, and are capped at 20 per session.
+- Retake review: RETAKE_AUTHORIZED starts require a locked, unconsumed authorization; consumption records consumed_at and consumed_by_attempt_id atomically.
+- Audit review: new administrator attempt actions write field-name arrays only and do not place cancellation reasons, retake reasons, or supervisor notes in audit JSON.
+- Migration lifecycle inventory: matching 003 up/down files are present and ordered after migrations 001 and 002.
+- Sanitized project security/inventory search: no unsafe SQL concatenation, hardcoded secrets, private keys, raw national-ID logging, debug calls, obsolete endpoints, or platform-bypass flags were found.
+
+Checks blocked by container capabilities:
+- PHPUnit could not start because the available PHP build lacks dom, mbstring, and xmlwriter.
+- MySQL integration tests and migration execution could not run because pdo_mysql and a MySQL server/client are unavailable in the container.
+
+Required verification on the target Windows/MySQL environment:
+1. C:\php82\php.exe scripts\migrate.php
+2. C:\php82\php.exe vendor\bin\phpunit
+3. Log in as supervisor and manually verify directory filters, attempt details, notes, cancellation, retake authorization, and expired-attempt finalization against test data.

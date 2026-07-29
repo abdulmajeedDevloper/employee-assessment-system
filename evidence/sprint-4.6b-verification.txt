@@ -1,0 +1,54 @@
+Sprint 4.6B Verification Summary
+================================
+
+Delivered scope
+---------------
+- CSRF-protected POST report generation route.
+- Permission-protected one-time report download route.
+- Excel export with four worksheets, filter preservation, explicit string cells, and formula-injection protection.
+- PDF export with UTF-8, Arabic RTL direction, bundled DejaVu Sans, summaries, breakdowns, and official-result rows.
+- Protected temporary storage outside public, random stored filenames, administrator/session-bound tokens, expiry, size/SHA-256 verification, and deletion after download.
+- Export row limits and cleanup automation.
+- Field-name-only audit payloads with no filenames, tokens, paths, employee values, or filter values.
+- Unit/integration tests and bilingual UI strings.
+
+Executed checks
+---------------
+PHP syntax files: 154 passed
+Route handlers: 61
+Missing route controller methods: 0
+Arabic translation keys: 605 unique
+English translation keys: 605 unique
+Duplicate translation keys: 0
+Missing translation keys: 0
+Trailing whitespace issues: 0
+Static export security checks: 20 passed, 0 failed
+Runtime-code dangerous execution/unserialize findings: 0
+Report template render: passed without PHP warnings
+Export form present: yes
+Excel/PDF buttons present: yes
+Download token length: 64 hexadecimal characters
+Wrong-administrator token use: rejected
+Valid-administrator token use: accepted
+Token reuse: rejected
+Spreadsheet formula smoke value: prefixed as text
+PDF/HTML escaping smoke value: escaped
+Composer JSON: valid
+mPDF package/API files: present
+PhpSpreadsheet package/API files: present
+
+PHPUnit status
+--------------
+The complete PHPUnit suite was not executed in this container. The available PHP CLI lacks dom, mbstring, and xmlwriter, and also lacks pdo_mysql, gd, and zip required by the application/export stack. The exact PHPUnit startup result is stored in evidence/sprint-4.6b-phpunit.raw.txt.
+
+Actual writer execution status
+------------------------------
+Actual .xlsx and .pdf creation was not executed in this container because the required PHP extensions are unavailable. Installed package sources and the exact APIs used by the implementation were verified. Writer orchestration, token issuance, one-time consumption, row-limit behavior, and value-free audit assertions are covered by tests added to the project for execution on the configured PHP/MySQL test environment.
+
+Primary added tests
+-------------------
+- tests/Unit/ReportExportSanitizerTest.php
+- tests/Unit/AdminReportDownloadTokenServiceTest.php
+- tests/Integration/AdminReportExportWorkflowTest.php
+- Extended tests/Unit/AdminReportServiceTest.php
+- Extended tests/Integration/AdminReportRepositoryTest.php

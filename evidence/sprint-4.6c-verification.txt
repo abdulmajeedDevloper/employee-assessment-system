@@ -1,0 +1,51 @@
+Sprint 4.6C Verification Summary
+================================
+Generated: 2026-07-28 UTC
+Scope: Database-backed assessment-completion email notifications
+
+Implemented
+-----------
+- Transactional completion outbox integration for manual submission and automatic timeout.
+- Configured HR/management recipients only; employee email is not used for delivery.
+- Required result gate with configurable test codes (default IQ_TEST, ENG_TEST).
+- Per-recipient SHA-256 deduplication and value-free system audit metadata.
+- Masked National ID payload; no full National ID query or employee email payload.
+- Arabic/English HTML and plain-text templates with RTL/LTR and output escaping.
+- PHPMailer SMTP transport with environment-only credentials and deterministic Message-ID.
+- Concurrent queue claiming with FOR UPDATE SKIP LOCKED.
+- Bounded retries, final failure state, and stale PROCESSING lock recovery.
+- Dry-run worker, reconciliation command, migration, rollback, cron, and deployment documentation.
+
+Verification Results
+--------------------
+PHP syntax                     : PASS (165 PHP files)
+Route handlers                 : PASS (61 routes; 0 missing methods)
+Translation parity             : PASS (605 Arabic / 605 English; 0 missing)
+Duplicate translation keys     : PASS (0 Arabic / 0 English)
+Notification security checks   : PASS (20 / 20)
+Notification service smoke     : PASS (11 / 11)
+Project-wide security searches : PASS
+Composer JSON/lock parsing     : PASS
+Trailing whitespace            : PASS (0 findings)
+PHPMailer availability         : PASS
+
+Not Executed in This Container
+------------------------------
+- PHPUnit unit/integration suite: BLOCKED because the container PHP lacks dom, mbstring,
+  xmlwriter, pdo_mysql, gd, and zip.
+- Migration 005 against MySQL: BLOCKED because no PDO MySQL driver or MySQL server is present.
+- Real SMTP delivery: intentionally not attempted because no client SMTP account was supplied.
+
+Required Client/Staging Verification
+------------------------------------
+1. Apply migrations with PHP 8.2 and MySQL 8.0.16+.
+2. Configure ASSESSMENT_COMPLETION_RECIPIENTS and all MAIL_* values in protected .env.
+3. Run vendor/bin/phpunit against employee_assessment_test.
+4. Run scripts/process_email_notifications.php --dry-run.
+5. Complete controlled IQ and English assessments and send to a controlled mailbox.
+6. Verify Arabic RTL, English LTR, secure admin link, SPF, DKIM, DMARC, and spam placement.
+7. Enable the cron/Task Scheduler worker only after the controlled delivery succeeds.
+
+Incidental Correction
+---------------------
+- Removed a duplicated assignment_id key from the attempt-start audit payload.

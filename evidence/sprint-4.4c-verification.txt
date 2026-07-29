@@ -1,0 +1,27 @@
+Sprint 4.4C Verification Evidence
+Generated: 2026-07-28 UTC
+
+Scope: Secure question and option image upload, replacement, protected preview, removal, and deferred deletion.
+
+Automated checks completed in this environment:
+- PHP syntax: 117 PHP files passed php -l.
+- Route reflection: 46 handlers checked; 0 missing classes or methods.
+- Translation parity: Arabic 367 keys; English 367 keys; 0 duplicates; 0 missing keys in either language.
+- Question detail template render: completed without PHP warnings; rendered output size 19001 bytes.
+- Upload validator smoke test: a genuine 1x1 PNG was accepted using detected image/png bytes despite an untrusted browser MIME and filename extension.
+- Sanitized project security/inventory search: no unsafe SQL concatenation, hardcoded secrets, private keys, raw-ID logging, debug calls, obsolete endpoints, or platform-bypass flags found.
+- Storage exposure defense: storage/.htaccess and storage/uploads/.htaccess deny direct Apache access; images are served through an authorized controller route.
+
+Checks blocked by container capabilities:
+- PHPUnit could not start because the container PHP lacks dom, mbstring, and xmlwriter. pdo_mysql is also unavailable, so MySQL integration tests cannot run here.
+- Composer CLI is not installed in the container. The included vendor autoloader loaded successfully.
+
+New tests added:
+- tests/Unit/QuestionImageUploadValidatorTest.php
+- tests/Integration/AdminQuestionMediaTest.php
+
+Important deployment verification:
+1. Ensure PHP extensions fileinfo, mbstring, pdo_mysql, dom, xmlwriter, and gd are enabled.
+2. Ensure storage/uploads is writable by PHP but not directly web-accessible.
+3. Run: php vendor/bin/phpunit
+4. Run periodically from CLI/cron: php scripts/process_pending_media_deletions.php
