@@ -48,7 +48,7 @@ class AuthController
             ) {
                 try {
                     $admin = $this->adminRepo->findById($adminId);
-                    $allowedRoles = ['super_admin', 'supervisor', 'report_viewer'];
+                    $allowedRoles = ['super_admin', 'admin', 'supervisor', 'report_viewer'];
                     if ($admin && (int)$admin['is_active'] === 1 && in_array($admin['role'], $allowedRoles, true)) {
                         $isValid = true;
                     }

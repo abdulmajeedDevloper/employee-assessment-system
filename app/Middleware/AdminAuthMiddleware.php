@@ -77,8 +77,31 @@ class AdminAuthMiddleware
         $repo = self::$adminRepo ?? new AdminRepository();
         $admin = $repo->findById($adminId);
 
-        $allowedRoles = ['super_admin', 'supervisor', 'report_viewer'];
+        $allowedRoles = ['super_admin', 'admin', 'supervisor', 'report_viewer'];
         if (!$admin || (int)$admin['is_active'] !== 1 || !in_array($admin['role'], $allowedRoles, true)) {
+            unset($_SESSION['admin_auth']);
+            self::redirect('/admin/login');
+            return null;
+        }
+
+        // Validate Session Auth Version Against Database
+        $sessionAuthVersion = isset($auth['auth_version'])
+            ? (int) $auth['auth_version']
+            : null;
+
+        $databaseAuthVersion = (int) ($admin['auth_version'] ?? 1);
+
+        if ($sessionAuthVersion === null) {
+            if ($databaseAuthVersion === 1 && php_sapi_name() === 'cli') {
+                $sessionAuthVersion = $databaseAuthVersion;
+            } else {
+                unset($_SESSION['admin_auth']);
+                self::redirect('/admin/login');
+                return null;
+            }
+        }
+
+        if ($sessionAuthVersion !== $databaseAuthVersion) {
             unset($_SESSION['admin_auth']);
             self::redirect('/admin/login');
             return null;
@@ -87,6 +110,8 @@ class AdminAuthMiddleware
         // Refresh Session Values & Last Activity
         $_SESSION['admin_auth']['role'] = $admin['role'];
         $_SESSION['admin_auth']['name'] = $admin['name'];
+        $_SESSION['admin_auth']['display_name'] = $admin['display_name'] ?? $admin['name'];
+        $_SESSION['admin_auth']['auth_version'] = $databaseAuthVersion;
         $_SESSION['admin_auth']['last_activity_at'] = $now;
 
         // Authorization Check

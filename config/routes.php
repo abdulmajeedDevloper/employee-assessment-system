@@ -11,7 +11,9 @@ use App\Controllers\Admin\TestController;
 use App\Controllers\Admin\QuestionController;
 use App\Controllers\Admin\AssignmentController;
 use App\Controllers\Admin\AttemptController;
+use App\Controllers\Admin\TestMonitoringController;
 use App\Controllers\Admin\ReportController;
+use App\Controllers\Admin\AdminUserController;
 
 return [
     'GET' => [
@@ -22,6 +24,10 @@ return [
         '/admin/login' => [AdminAuthController::class, 'showLogin'],
         '/admin' => [AdminDashboardController::class, 'index'],
         '/admin/dashboard' => [AdminDashboardController::class, 'index'],
+        '/admin/admin-users' => [AdminUserController::class, 'index'],
+        '/admin/admin-users/create' => [AdminUserController::class, 'create'],
+        '/admin/admin-users/edit' => [AdminUserController::class, 'edit'],
+        '/admin/admin-users/password' => [AdminUserController::class, 'changePassword'],
         '/admin/employees' => [EmployeeController::class, 'index'],
         '/admin/employees/create' => [EmployeeController::class, 'create'],
         '/admin/employees/edit' => [EmployeeController::class, 'edit'],
@@ -43,6 +49,7 @@ return [
         '/admin/assignments/view' => [AssignmentController::class, 'show'],
         '/admin/attempts' => [AttemptController::class, 'index'],
         '/admin/attempts/view' => [AttemptController::class, 'show'],
+        '/admin/monitoring' => [TestMonitoringController::class, 'index'],
         '/admin/reports' => [ReportController::class, 'index'],
         '/admin/reports/download' => [ReportController::class, 'download'],
     ],
@@ -57,6 +64,10 @@ return [
         '/employee/attempt/focus-loss' => [AssessmentAttemptController::class, 'focusLoss'],
         '/admin/login' => [AdminAuthController::class, 'login'],
         '/admin/logout' => [AdminAuthController::class, 'logout'],
+        '/admin/admin-users/create' => [AdminUserController::class, 'store'],
+        '/admin/admin-users/edit' => [AdminUserController::class, 'update'],
+        '/admin/admin-users/password' => [AdminUserController::class, 'updatePassword'],
+        '/admin/admin-users/toggle-status' => [AdminUserController::class, 'toggleStatus'],
         '/admin/employees/create' => [EmployeeController::class, 'store'],
         '/admin/employees/edit' => [EmployeeController::class, 'update'],
         '/admin/employees/archive' => [EmployeeController::class, 'archive'],

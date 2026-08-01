@@ -99,7 +99,7 @@ class AdminAuthService
         $passwordValid = password_verify($rawPassword, $hashToVerify);
 
         // Separate Evaluation of Account Existence, Password Validity, Activity, and Allowed Role
-        $allowedRoles = ['super_admin', 'supervisor', 'report_viewer'];
+        $allowedRoles = ['super_admin', 'admin', 'supervisor', 'report_viewer'];
         $accountValid = (
             $admin !== null &&
             $passwordValid &&
@@ -187,6 +187,8 @@ class AdminAuthService
             'admin_id' => (int) $admin['id'],
             'role' => $admin['role'],
             'name' => $admin['name'],
+            'display_name' => $admin['display_name'] ?? $admin['name'],
+            'auth_version' => (int) ($admin['auth_version'] ?? 1),
             'authenticated_at' => $now,
             'last_activity_at' => $now,
             'absolute_start_at' => $now,
@@ -204,6 +206,36 @@ class AdminAuthService
             'success' => true,
             'admin' => $safeAdmin
         ];
+    }
+
+    /**
+     * Verify current password for specified admin ID (used for acting super_admin confirmation).
+     *
+     * @param int $adminId
+     * @param string $password
+     * @return bool
+     */
+    public function verifyCurrentPassword(int $adminId, string $password): bool
+    {
+        if ($adminId <= 0 || empty($password)) {
+            return false;
+        }
+
+        try {
+            $stmt = $this->pdo->prepare("SELECT password_hash FROM admins WHERE id = :id AND is_active = 1 LIMIT 1");
+            $stmt->bindValue(':id', $adminId, PDO::PARAM_INT);
+            $stmt->execute();
+            $hash = $stmt->fetchColumn();
+
+            if (!$hash) {
+                return false;
+            }
+
+            return password_verify($password, $hash);
+        } catch (\Throwable $e) {
+            error_log("Error in verifyCurrentPassword: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**

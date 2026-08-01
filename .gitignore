@@ -19,3 +19,6 @@ Thumbs.db
 /employee_assessment_mysql8_backup.sql
 
 /storage/*.log
+/storage/admin-account-management-backup/
+/storage/targeted-ui-fix-backup/
+/storage/before-targeted-ui-fix.patch

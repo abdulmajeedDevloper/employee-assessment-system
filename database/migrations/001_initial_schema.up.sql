@@ -12,11 +12,14 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 CREATE TABLE IF NOT EXISTS admins (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    display_name VARCHAR(255) NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     username VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    role ENUM('super_admin', 'supervisor', 'report_viewer') NOT NULL DEFAULT 'supervisor',
+    role ENUM('super_admin', 'admin', 'supervisor', 'report_viewer') NOT NULL DEFAULT 'admin',
     is_active TINYINT(1) NOT NULL DEFAULT 1,
+    is_primary TINYINT(1) NOT NULL DEFAULT 0,
+    auth_version INT NOT NULL DEFAULT 1,
     last_login_at DATETIME NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL

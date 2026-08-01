@@ -27,11 +27,14 @@ class AdminRepository
             SELECT
                 id,
                 name,
+                COALESCE(display_name, name) AS display_name,
                 email,
                 username,
                 password_hash,
                 role,
                 is_active,
+                is_primary,
+                auth_version,
                 last_login_at,
                 created_at,
                 updated_at
@@ -61,10 +64,13 @@ class AdminRepository
             SELECT
                 id,
                 name,
+                COALESCE(display_name, name) AS display_name,
                 email,
                 username,
                 role,
                 is_active,
+                is_primary,
+                auth_version,
                 last_login_at,
                 created_at,
                 updated_at

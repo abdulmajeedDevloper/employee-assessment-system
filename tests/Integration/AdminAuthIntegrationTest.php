@@ -310,7 +310,7 @@ class AdminAuthIntegrationTest extends TestCase
         $keys = array_keys($authPayload);
         sort($keys);
 
-        $expectedKeys = ['absolute_start_at', 'admin_id', 'authenticated_at', 'last_activity_at', 'name', 'role'];
+        $expectedKeys = ['absolute_start_at', 'admin_id', 'auth_version', 'authenticated_at', 'display_name', 'last_activity_at', 'name', 'role'];
         $this->assertEquals($expectedKeys, $keys);
         $this->assertEquals(10, $authPayload['admin_id']);
         $this->assertEquals('super_admin', $authPayload['role']);

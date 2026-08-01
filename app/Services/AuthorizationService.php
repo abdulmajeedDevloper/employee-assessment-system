@@ -25,8 +25,8 @@ class AuthorizationService
             return true;
         }
 
-        // Supervisor permissions
-        if ($role === 'supervisor') {
+        // Admin / Supervisor permissions
+        if ($role === 'admin' || $role === 'supervisor') {
             return match ($action) {
                 'view_dashboard',
                 'view_employees',
@@ -44,7 +44,7 @@ class AuthorizationService
                 'manage_attempt_notes',
                 'view_reports',
                 'export_reports' => true,
-                'manage_admins', 'system_settings' => false,
+                'manage_admins' => false,
                 default => false,
             };
         }
