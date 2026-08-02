@@ -1,5 +1,6 @@
 <?php
 
+use App\Middleware\SecurityHeadersMiddleware;
 use App\Middleware\SessionMiddleware;
 
 // Load Composer Vendor Autoloader
@@ -28,7 +29,8 @@ ini_set('error_log', __DIR__ . '/../storage/logs/app.log');
 // Include global helper functions
 require_once __DIR__ . '/../app/Support/HelperFunctions.php';
 
-// Initialize Session Middleware if web request
+// Initialize Security Headers and Session Middleware if web request
 if (php_sapi_name() !== 'cli') {
+    SecurityHeadersMiddleware::handle();
     SessionMiddleware::handle();
 }
