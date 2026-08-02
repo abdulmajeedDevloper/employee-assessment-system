@@ -103,6 +103,27 @@ if (!function_exists('trans')) {
     }
 }
 
+if (!function_exists('send_http_status')) {
+    /**
+     * Send HTTP response status header, ensuring non-standard status codes like 419 are correctly set.
+     *
+     * @param int $statusCode
+     * @return void
+     */
+    function send_http_status(int $statusCode): void
+    {
+        if ($statusCode === 419) {
+            $protocol = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1';
+            if (!is_string($protocol) || !preg_match('/^HTTP\/\d\.\d$/i', $protocol)) {
+                $protocol = 'HTTP/1.1';
+            }
+            header($protocol . ' 419 Page Expired', true, 419);
+        } else {
+            http_response_code($statusCode);
+        }
+    }
+}
+
 if (!function_exists('response_json')) {
     /**
      * Send JSON response and terminate.
@@ -113,7 +134,7 @@ if (!function_exists('response_json')) {
      */
     function response_json(array $data, int $statusCode = 200): void
     {
-        http_response_code($statusCode);
+        send_http_status($statusCode);
         header('Content-Type: application/json; charset=utf-8');
         header('X-Content-Type-Options: nosniff');
         header('X-Frame-Options: SAMEORIGIN');
