@@ -529,9 +529,13 @@ class AdminEmployeeDirectoryTest extends TestCase
         // 1. Masked national ID output contains LTR bdi isolation element and exact masked value
         $this->assertStringContainsString('******8801', $output);
         $this->assertStringContainsString('<bdi dir="ltr" class="employee-technical-value">', $output);
-        $this->assertStringContainsString('.employee-technical-value', $output);
-        $this->assertStringContainsString('display: inline-block;', $output);
-        $this->assertStringContainsString('width: auto;', $output);
+
+        $adminCssPath = dirname(__DIR__, 2) . '/public/assets/css/admin.css';
+        $this->assertFileIsReadable($adminCssPath, 'Centralized admin.css stylesheet must exist and be readable.');
+        $adminCssContent = (string) file_get_contents($adminCssPath);
+        $this->assertStringContainsString('body.admin-view-employees-show .employee-technical-value', $adminCssContent);
+        $this->assertStringContainsString('display: inline-block;', $adminCssContent);
+        $this->assertStringContainsString('width: auto;', $adminCssContent);
 
         // 2. Sensitive encrypted identity fields remain absent
         $encryptedFields = [

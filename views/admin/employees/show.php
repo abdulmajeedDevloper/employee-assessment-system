@@ -215,9 +215,7 @@ ob_start();
                         <div class="employee-detail-content">
                             <span class="employee-detail-label"><?= e(trans('employee_number')) ?></span>
                             <strong class="employee-detail-value">
-                                <bdi dir="ltr" class="technical-value">
-                                    <?= !empty($employee['employee_number']) ? e((string)$employee['employee_number']) : '—' ?>
-                                </bdi>
+                                <bdi dir="ltr" class="employee-technical-value"><?= !empty($employee['employee_number']) ? e((string)$employee['employee_number']) : '—' ?></bdi>
                             </strong>
                         </div>
                     </article>
@@ -227,9 +225,7 @@ ob_start();
                         <div class="employee-detail-content">
                             <span class="employee-detail-label"><?= e(trans('national_id_last4')) ?></span>
                             <strong class="employee-detail-value">
-                                <bdi dir="ltr" class="technical-value">
-                                    ******<?= e((string)($employee['national_id_last4'] ?? '')) ?>
-                                </bdi>
+                                <bdi dir="ltr" class="employee-technical-value">******<?= e((string)($employee['national_id_last4'] ?? '')) ?></bdi>
                             </strong>
                         </div>
                     </article>
@@ -239,7 +235,7 @@ ob_start();
                         <div class="employee-detail-content">
                             <span class="employee-detail-label"><?= e(trans('email')) ?></span>
                             <strong class="employee-detail-value">
-                                <bdi dir="ltr" class="technical-value"><?= e((string)($employee['email'] ?? '—')) ?></bdi>
+                                <bdi dir="ltr" class="employee-technical-value"><?= e((string)($employee['email'] ?? '—')) ?></bdi>
                             </strong>
                         </div>
                     </article>
@@ -249,7 +245,7 @@ ob_start();
                         <div class="employee-detail-content">
                             <span class="employee-detail-label"><?= e(trans('phone')) ?></span>
                             <strong class="employee-detail-value">
-                                <bdi dir="ltr" class="technical-value"><?= e((string)($employee['phone'] ?? '—')) ?></bdi>
+                                <bdi dir="ltr" class="employee-technical-value"><?= e((string)($employee['phone'] ?? '—')) ?></bdi>
                             </strong>
                         </div>
                     </article>
@@ -341,7 +337,7 @@ ob_start();
                         <div class="employee-detail-content">
                             <span class="employee-detail-label"><?= e(trans('created_at')) ?></span>
                             <strong class="employee-detail-value">
-                                <bdi dir="ltr" class="technical-value"><?= e((string)($employee['created_at'] ?? '—')) ?></bdi>
+                                <bdi dir="ltr" class="employee-technical-value"><?= e((string)($employee['created_at'] ?? '—')) ?></bdi>
                             </strong>
                         </div>
                     </article>
@@ -352,7 +348,7 @@ ob_start();
                             <div class="employee-detail-content">
                                 <span class="employee-detail-label"><?= e(trans('archived')) ?></span>
                                 <strong class="employee-detail-value admin-inline-48f44ffaa6">
-                                    <bdi dir="ltr" class="technical-value"><?= e((string)$employee['archived_at']) ?></bdi>
+                                    <bdi dir="ltr" class="employee-technical-value"><?= e((string)$employee['archived_at']) ?></bdi>
                                 </strong>
                             </div>
                         </article>

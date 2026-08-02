@@ -5180,11 +5180,13 @@ body.admin-view-employees-show .employee-show-page{
         overflow-wrap: anywhere;
     }
 
+    body.admin-view-employees-show .employee-technical-value,
     body.admin-view-employees-show .technical-value{
         direction: ltr;
         unicode-bidi: isolate;
         display: inline-block;
         max-width: 100%;
+        width: auto;
     }
 
     body.admin-view-employees-show .employee-empty{

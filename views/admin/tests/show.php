@@ -261,9 +261,7 @@ ob_start();
                                 <span class="detail-label"><?= e(trans('available_from')) ?></span>
                                 <strong class="detail-value">
                                     <?php if ($availableFrom !== null): ?>
-                                        <bdi dir="ltr" class="technical-value">
-                                            <?= e(\App\Support\TimezoneHelper::format((string)$availableFrom)) ?>
-                                        </bdi>
+                                        <bdi dir="ltr" class="technical-value"><?= e(\App\Support\TimezoneHelper::format((string)$availableFrom)) ?></bdi>
                                     <?php else: ?>
                                         <?= e(trans('available_immediately')) ?>
                                     <?php endif; ?>
@@ -277,9 +275,7 @@ ob_start();
                                 <span class="detail-label"><?= e(trans('available_until')) ?></span>
                                 <strong class="detail-value">
                                     <?php if ($availableUntil !== null): ?>
-                                        <bdi dir="ltr" class="technical-value">
-                                            <?= e(\App\Support\TimezoneHelper::format((string)$availableUntil)) ?>
-                                        </bdi>
+                                        <bdi dir="ltr" class="technical-value"><?= e(\App\Support\TimezoneHelper::format((string)$availableUntil)) ?></bdi>
                                     <?php else: ?>
                                         <?= e(trans('no_end_date')) ?>
                                     <?php endif; ?>
@@ -354,7 +350,7 @@ ob_start();
         <div class="test-section-head">
             <span class="section-icon"><?= $icon('stats') ?></span>
             <div>
-                <h2><?= e(trans('assessment_statistics')) ?></h2>
+                <h2 class="section-title"><?= e(trans('assessment_statistics')) ?></h2>
                 <p><?= e($text('ملخص رقمي للإسنادات والمحاولات والأسئلة المرتبطة.', 'A numeric summary of assignments, attempts, and linked questions.')) ?></p>
             </div>
         </div>
