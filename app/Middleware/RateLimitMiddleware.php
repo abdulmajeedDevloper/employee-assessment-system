@@ -24,7 +24,7 @@ class RateLimitMiddleware
 
         $identifierHash = HashManager::hashRateLimitIdentifier($normalizedTarget);
 
-        // Check Target Identifier failures across all IPs
+        // Check Target Identifier failures occurring after the latest successful attempt for the same identifier and action
         $stmtTarget = $pdo->prepare("
             SELECT COUNT(*) AS fail_count
             FROM rate_limits
@@ -32,10 +32,19 @@ class RateLimitMiddleware
               AND action_key = :action
               AND is_success = 0
               AND created_at >= UTC_TIMESTAMP() - INTERVAL :minutes MINUTE
+              AND id > COALESCE((
+                  SELECT MAX(id)
+                  FROM rate_limits
+                  WHERE identifier_hash = :succ_hash
+                    AND action_key = :succ_action
+                    AND is_success = 1
+              ), 0)
         ");
         $stmtTarget->bindValue(':hash', $identifierHash, PDO::PARAM_STR);
         $stmtTarget->bindValue(':action', $actionKey, PDO::PARAM_STR);
         $stmtTarget->bindValue(':minutes', $lockoutMinutes, PDO::PARAM_INT);
+        $stmtTarget->bindValue(':succ_hash', $identifierHash, PDO::PARAM_STR);
+        $stmtTarget->bindValue(':succ_action', $actionKey, PDO::PARAM_STR);
         $stmtTarget->execute();
         $targetFails = (int)$stmtTarget->fetchColumn();
 

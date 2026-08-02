@@ -169,7 +169,7 @@ class AdminAuthService
             ];
         }
 
-        // Best-effort Record Successful Rate Limit Attempt
+        // Best-effort Record Successful Rate Limit Attempt (acts as identifier reset marker)
         try {
             RateLimitMiddleware::recordAttempt($rateLimitKey, $normalizedIdentifier, $ipAddress, true);
         } catch (\Throwable $e) {

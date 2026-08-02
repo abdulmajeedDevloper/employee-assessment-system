@@ -55,7 +55,7 @@ class EmployeeAuthService
             ];
         }
 
-        // Authentication Successful: Record Success Attempt
+        // Authentication Successful: Record Success Attempt (acts as identifier reset marker)
         RateLimitMiddleware::recordAttempt($rateLimitKey, $nationalId, $ipAddress, true);
 
         // Session Hardening & Isolation
